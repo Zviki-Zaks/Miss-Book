@@ -1,4 +1,4 @@
-import aboutPage from "./views/about-page.cmp.js";
+import aboutPage, {aboutThanks} from "./views/about-page.cmp.js";
 import bookAdd from "./views/book-add.cmp.js";
 import bookApp from "./views/book-app.cmp.js";
 import bookDetails from "./views/book-details.cmp.js";
@@ -24,12 +24,14 @@ const routes = [
         component: bookDetails
     },
     {
-        path: '/book/:bookId',
-        component: bookDetails
-    },
-    {
         path: '/about',
-        component: aboutPage
+        component: aboutPage,
+        children: [
+            {
+                path: 'thanks',
+                component: aboutThanks
+            }
+        ]
     },
 ]
 

@@ -33,10 +33,10 @@
 .book-details .price {
     align-self: center;
 }
-.book-details .bake-btn,.review-btn {
+.book-details .back-btn,.review-btn,.prev-btn,.next-btn {
     display: block;
     align-self: center;
-    margin: 1rem auto;
+    margin: 0.5rem auto;
 }
 
 .red {

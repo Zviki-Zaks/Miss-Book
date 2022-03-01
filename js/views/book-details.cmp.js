@@ -22,20 +22,23 @@ export default {
                  &#9672 
                 <span> Published: {{year}}{{publishedDescription}}</span>
                  &#9672 
-                <span>{{book.pageCount}} pages-{{readingLength}}</span>
+                <span>{{book.pageCount}} pages{{readingLength}}</span>
             </p>
-            <p class="price">Price: <span :class="bookPrice">{{currencySymbol}}</span>  <span v-if="book.listPrice.isOnSale">SALE</span></p>
-            <h4 v-if="reviews">reviews: </h4>
-            <div v-if="reviews" v-for="review in reviews" class="reviews">
-            <book-review :review="review" :bookId="book.id" @remove-review="updateReviews"/>
-            </div>
+            <p class="price">Price: <span :class="bookPrice">{{currencySymbol}}</span>  <span v-if="book.listPrice.isOnSale"> SALE</span></p>
+            <ul v-if="reviews && reviews.length" class="reviews">
+                <h4 >reviews: </h4>
+            <book-review :review="review" :bookId="book.id" v-for="review in reviews" @remove-review="updateReviews"/>
+            </ul>
             <button @click="isAdd = !isAdd" class="review-btn">{{reviewBtn}}</button>
             <review-add v-if="isAdd" :bookId="book.id" @add-review="updateReviews"/>
-            <button class="bake-btn"><router-link to="/book">Bake</router-link></button>
+            <button class="prev-btn"><router-link :to="'/book/'+ book.prevBookId">Prev Book</router-link></button>
+            <button class="back-btn"><router-link to="/book">Back</router-link></button>
+            <button class="next-btn"><router-link :to="'/book/'+ book.nextBookId">Next Book</router-link></button>
         </section>
     `,
     data() {
         return {
+            // bookId: null,
             book: null,
             src: null,
             year: null,
@@ -45,15 +48,7 @@ export default {
         }
     },
     created() {
-        const id = this.$route.params.bookId
-        booksService.getBookById(id)
-            .then(book => {
-                this.book = book
-                this.src = book.thumbnail
-                this.year = book.publishedDate
-                this.txt = book.description
-                this.reviews = book.reviews
-            })
+        this.getBook()
     },
     components: {
         longTxt,
@@ -61,12 +56,24 @@ export default {
         bookReview,
     },
     methods: {
-        updateReviews(){
+        getBook() {
+            const id = this.$route.params.bookId
+            booksService.getBookById(id)
+                .then(book => {
+                    this.book = book
+                    this.src = book.thumbnail
+                    this.year = book.publishedDate
+                    this.txt = book.description
+                    this.reviews = book.reviews
+                })
+        },
+        updateReviews() {
             booksService.getBookById(this.book.id)
-                .then(book => {this.reviews = book.reviews
+                .then(book => {
+                    this.reviews = book.reviews
                     this.isAdd = false
-                    console.log(book);
-                console.log('get');})
+                    console.log('get');
+                })
         }
     },
     computed: {
@@ -77,13 +84,13 @@ export default {
             const publishedDate = new Date().setFullYear(this.year)
             const tenTearsAgo = new Date().setFullYear(new Date().getFullYear() - 10)
             const yearAgo = new Date().setFullYear(new Date().getFullYear() - 1)
-            if (publishedDate <= tenTearsAgo) return '-Veteran Book'
-            else if (publishedDate >= yearAgo) return '-New!'
+            if (publishedDate <= tenTearsAgo) return '- Veteran Book'
+            else if (publishedDate >= yearAgo) return '- New!'
         },
         readingLength() {
-            if (this.book.pageCount > 500) return 'Long reading'
-            else if (this.book.pageCount > 200) return 'Decent reading'
-            else if (this.book.pageCount < 100) return 'Light reading'
+            if (this.book.pageCount > 500) return '- Long reading'
+            else if (this.book.pageCount > 200) return '- Decent reading'
+            else if (this.book.pageCount < 100) return '- Light reading'
         },
         currencySymbol() {
             return Intl.NumberFormat('en', { style: 'currency', currency: this.book.listPrice.currencyCode }).format(this.book.listPrice.amount)
@@ -93,8 +100,14 @@ export default {
                 red: this.book.listPrice.amount > 150, green: this.book.listPrice.amount < 20
             }
         },
-        reviewBtn(){
-            return this.isAdd ? 'Close': 'Add review'
+        reviewBtn() {
+            return this.isAdd ? 'Close' : 'Add review'
         },
     },
+    watch: {
+        '$route.params.bookId'() {
+            console.log('watch');
+            this.getBook()
+        }
+    }
 }

@@ -6,17 +6,75 @@ export const booksService = {
   getBookById,
   addReview,
   removeReview,
+  searchBooks,
+  addBook,
 }
 
+const CACHE_KEY = 'searches'
 const BOOKS_KEY = 'books'
 _createBooks()
 
-function query() {
-  return storageService.query(BOOKS_KEY)
+function query(key = BOOKS_KEY) {
+  return storageService.query(key)
 }
 
 function getBookById(bookId) {
   return storageService.get(BOOKS_KEY, bookId)
+    .then(book => {
+      return _setNextPrevBookId(book)
+    })
+}
+
+function _setNextPrevBookId(book) {
+  return query()
+    .then(books => {
+      const bookIdx = books.findIndex(currBook => currBook.id === book.id)
+      book.nextBookId = (books[bookIdx + 1]) ? books[bookIdx + 1].id : books[0].id
+      book.prevBookId = (books[bookIdx - 1]) ? books[bookIdx - 1].id : books[books.length - 1].id
+      return book
+    })
+}
+
+function addBook(book) {
+  return storageService.post(BOOKS_KEY, book)
+}
+
+function searchBooks(val) {
+  return query(CACHE_KEY)
+    .then(res => res)
+    .then(cache => {
+      if (cache[val]) return cache
+      console.log('call api');
+      return axios.get(`https://www.googleapis.com/books/v1/volumes?printType=books&q=${val}`)
+        .then(res => {
+          cache[val] = _prepareData(res.data)
+          console.log(cache[val]);
+          utilService.save(CACHE_KEY, cache)
+          return cache
+        })
+    })
+}
+
+function _prepareData({ items }) {
+  return items.map(item => {
+    return {
+      id: item.id,
+      title: item.volumeInfo.title,
+      subtitle: item.volumeInfo.subtitle,
+      authors: item.volumeInfo.authors,
+      publishedDate: item.volumeInfo.publishedDate,
+      description: item.volumeInfo.description,
+      pageCount: item.volumeInfo.pageCount,
+      categories: item.volumeInfo.categories,
+      thumbnail: item.volumeInfo.imageLinks?.thumbnail,
+      language: item.volumeInfo.language,
+      listPrice: {
+        amount: utilService.randomInt(20, 200),
+        currencyCode: "USD",
+        isOnSale: false
+      }
+    }
+  })
 }
 
 function addReview(bookId, review) {

@@ -10,11 +10,7 @@ export default {
                 <label for="rate">Rate </label>
                 <input list="rate-list" id="rate" v-model="review.rate" >
                 <datalist id="rate-list">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option v-for="n in 5" :value="n">{{n}}</option>
                 </datalist>
                 <label for="date">Read at</label>
                 <input type="date" id="date" v-model="review.readAt">
@@ -25,7 +21,7 @@ export default {
         </section>
     `,
     mounted() {
-        this.$refs.nameInput.focus({ preventScroll: false })
+        this.$refs.nameInput.focus()
     },
     data() {
         return {

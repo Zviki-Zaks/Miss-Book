@@ -1,4 +1,17 @@
 
 .book-add {
     margin: 1rem 10%;
- }
+}
+.book-add ul {
+    background-color: azure;
+    padding: .5rem;
+    list-style: none;
+    border-radius: 5px;
+}
+.book-add li {
+    background-color: rgba(201, 206, 206, 0.349);
+    padding: 0.3em;
+    margin: 0.3em;
+    border-radius: 5px;
+    cursor: pointer;
+}

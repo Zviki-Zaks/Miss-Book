@@ -1,4 +1,5 @@
 import { booksService } from "../services/books-service.js"
+import { eventBus } from "../services/eventBus-service.js"
 
 import reviewAdd from "../cmps/review-add.cmp.js"
 
@@ -6,27 +7,47 @@ export default {
     template: `
         <section class="book-add">
             <label >Search: 
-                <input ref="searchInput" type="search" v-model="search">
+                <input ref="searchInput" type="search" v-model.lazy="search" @change="searchBooks">
             </label>
+            <ul v-if="books">
+                <li v-for="book in books" value="book.id" @click="selectBook(book)">{{book.title}}</li>
+            </ul>
             <!-- <review-add :bookId="book.id"/> -->
         </section>
     `,
     data() {
         return {
-            search: ''
+            search: '',
+            books: null,
+
         }
-    },
-    mounted() {
-        this.$refs.searchInput.focus()
     },
     created() {
 
+    },
+    mounted() {
+        this.$refs.searchInput.focus()
     },
     components: {
         reviewAdd,
     },
     methods: {
-
+        searchBooks() {
+            booksService.searchBooks(this.search)
+                .then(books => {
+                    this.books = books[this.search]
+                    console.log(books);
+                })
+        },
+        selectBook(book) {
+            console.log('click');
+            booksService.addBook(book)
+                .then(book => {
+                    console.log(book);
+                    this.$emit('add-book')
+                    this.$router.push('/book')
+                })
+        }
     },
     computed: {
         lng() {

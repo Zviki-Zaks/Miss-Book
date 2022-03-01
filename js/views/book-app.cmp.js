@@ -9,7 +9,7 @@ export default {
         <section class="book-app main-layout">
             <books-filter @filtered="setFilter" />
             <router-link to="/book/add" class="add-link">Add new book</router-link>
-            <router-view></router-view>
+            <router-view @add-book="addBook"/>
             <books-list :books="booksToDisplay"/>
         </section>
     `,
@@ -25,13 +25,19 @@ export default {
         }
     },
     created() {
-        booksService.query()
-            .then(books => this.books = books)
+        this.getBooks()
     },
     methods: {
+        getBooks(){
+            booksService.query()
+            .then(books => this.books = books)
+        },
         setFilter(filter) {
             console.log('filter', filter);
             this.filterBy = filter
+        },
+        addBook() {
+            this.getBooks()
         }
     },
     computed: {
