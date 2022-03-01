@@ -1,0 +1,15 @@
+
+.home-page {
+    background-color: rgb(189, 186, 186);
+}
+.home-page .gb-img{
+    background-image: url(/imgs/library.jpeg);
+    height: 50vh;
+    opacity: 0.4;
+}
+.home-page h1{
+    padding: 1rem;
+    text-align: center;
+    font-size: 3rem;
+    color: #563d42;
+}

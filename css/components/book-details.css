@@ -1,0 +1,47 @@
+
+.book-details {
+    background-color: azure;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 20%;
+}
+.book-details p{
+    margin-bottom: 1em;
+}
+.book-details img {
+    width: 40%;
+    max-width: 325px;
+    align-self: center;
+}
+.book-details h2 i{
+    text-transform: uppercase;
+}
+.book-details .h4 {
+    margin-bottom: 0;
+}
+.book-details p:nth-last-of-type(2) {
+    align-self: center;
+}
+.book-details .categories a{
+    display: inline;
+    padding-inline-start: 1em;
+}
+.book-details .categories a:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.book-details .price {
+    align-self: center;
+}
+.book-details .bake-btn,.review-btn {
+    display: block;
+    align-self: center;
+    margin: 1rem auto;
+}
+
+.red {
+    color: red;
+}
+.green {
+    color: green
+}

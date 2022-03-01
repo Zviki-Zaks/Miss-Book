@@ -1,0 +1,8 @@
+
+.long-txt {
+    margin-bottom: 1em;
+}
+.long-txt p{
+    display: inline;
+    padding-inline-end: 1em;
+}

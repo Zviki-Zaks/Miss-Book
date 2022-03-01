@@ -1,0 +1,13 @@
+
+.book-preview {
+    background-color: azure;
+    height: 100%;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+    grid-column:span auto;
+}
+.book-preview .book-title{
+    text-transform: uppercase;
+    margin: 1em;
+}

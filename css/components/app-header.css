@@ -1,0 +1,17 @@
+
+.app-header {
+    background-color: rgb(143, 96, 96);
+    color: whitesmoke;
+    text-align: center;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 20%;
+}
+
+.app-header .header-nav {
+    font-size: 1rem;
+}
+.app-header .header-nav a{
+    padding: 10px;
+}
