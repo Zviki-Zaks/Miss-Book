@@ -3,7 +3,7 @@
     background-color: rgb(189, 186, 186);
 }
 .home-page .gb-img{
-    background-image: url(/imgs/library.jpeg);
+    background-image: url("/imgs/library.jpeg");
     height: 50vh;
     opacity: 0.4;
 }
