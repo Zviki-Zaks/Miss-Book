@@ -3,11 +3,13 @@ import { booksService } from '../services/books-service.js'
 import booksFilter from '../cmps/books-filter.cpm.js'
 import booksList from '../cmps/books-list.cpm.js'
 import bookAdd from '../views/book-add.cmp.js'
+import userMsg from '../cmps/user-msg.cmp.js'
 
 export default {
     template: `
         <section class="book-app main-layout">
             <books-filter @filtered="setFilter" />
+            <user-msg/>
             <router-link to="/book/add" class="add-link">Add new book</router-link>
             <router-view @add-book="addBook"/>
             <books-list :books="booksToDisplay"/>
@@ -17,6 +19,7 @@ export default {
         booksFilter,
         booksList,
         bookAdd,
+        userMsg
     },
     data() {
         return {
